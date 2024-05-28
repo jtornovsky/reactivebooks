@@ -1,18 +1,44 @@
 package com.devskiller.model;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
+import jakarta.persistence.*;
+
+@Entity
 public class Book {
 
-	private final Author author;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-	private final String title;
+	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@JoinColumn(name = "author_id")
+	private Author author;
 
-	private final String isbn;
+	private String title;
 
-	private final Genre genre;
+	private String isbn;
+
+	private Genre genre;
 
 	private int rating;
+
+	@ManyToMany(mappedBy = "favouriteBooks")
+	private Set<Reader> readers = new HashSet<>();
+
+	public Book() {
+
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 	public Book(Author author, String title, String isbn, Genre genre) {
 		this.author = author;

@@ -4,14 +4,35 @@ import java.util.Set;
 
 import com.google.common.collect.Sets;
 
+import jakarta.persistence.*;
+
+
+@Entity
 public class Reader {
 
-	private final Set<Book> favouriteBooks = Sets.newHashSet();
-	private final Set<Genre> favouriteGenres = Sets.newHashSet();
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+
+	@ManyToMany
+	@JoinTable(
+			name = "reader_favourite_books",
+			joinColumns = @JoinColumn(name = "reader_id"),
+			inverseJoinColumns = @JoinColumn(name = "book_id")
+	)
+	private Set<Book> favouriteBooks = Sets.newHashSet();
+
+	@ElementCollection
+	private Set<Genre> favouriteGenres = Sets.newHashSet();
+
 	private int age;
 
 	public Reader(int age) {
 		this.age = age;
+	}
+
+	public Reader() {
+
 	}
 
 	public void addToFavourites(Book book) {
@@ -40,6 +61,14 @@ public class Reader {
 
 	public Set<Genre> getFavouriteGenres() {
 		return Sets.newHashSet(favouriteGenres);
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	@Override

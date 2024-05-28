@@ -1,13 +1,34 @@
 package com.devskiller.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+@Entity
 public class Author {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 	private String firstName;
 	private String lastName;
 
 	public Author(String firstName, String lastName) {
 		this.firstName = firstName;
 		this.lastName = lastName;
+	}
+
+	public Author() {
+
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getFirstName() {
