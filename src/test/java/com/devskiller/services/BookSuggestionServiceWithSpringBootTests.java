@@ -25,6 +25,9 @@ public class BookSuggestionServiceWithSpringBootTests {
     private BookSuggestionService bookSuggestionService;
 
     @Autowired
+    private BookService bookService;
+
+    @Autowired
     private ReaderRepository readerRepository;
 
     @Autowired
@@ -64,12 +67,12 @@ public class BookSuggestionServiceWithSpringBootTests {
         readerService.saveReader(reader2);
         readerService.saveReader(reader3);
 
-        bookSuggestionService.addBook(book1);
-        bookSuggestionService.addBook(book2);
-        bookSuggestionService.addBook(book3);
-        bookSuggestionService.addBook(book4);
-        bookSuggestionService.addBook(book5);
-        bookSuggestionService.addBook(book6);
+        bookService.addBook(book1);
+        bookService.addBook(book2);
+        bookService.addBook(book3);
+        bookService.addBook(book4);
+        bookService.addBook(book5);
+        bookService.addBook(book6);
 
         assertEquals(3, readerRepository.findAll().size());
         assertEquals(6, bookRepository.findAll().size());

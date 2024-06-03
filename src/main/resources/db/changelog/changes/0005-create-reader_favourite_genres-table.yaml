@@ -1,0 +1,32 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0005-create-reader_favourite_genres-table
+      author: jtornovsky
+      changes:
+        - createTable:
+            tableName: reader_favourite_genres
+            columns:
+              - column:
+                  name: reader_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: favourite_genre
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            tableName: reader_favourite_genres
+            columnNames: reader_id, favourite_genre
+        - addForeignKeyConstraint:
+            baseTableName: reader_favourite_genres
+            baseColumnNames: reader_id
+            constraintName: fk_reader_favourite_genres_reader
+            referencedTableName: reader
+            referencedColumnNames: id
+            onDelete: CASCADE
+
+      rollback:
+        - dropTable:
+            tableName: reader_favourite_genres

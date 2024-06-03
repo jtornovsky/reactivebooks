@@ -5,13 +5,19 @@ import java.util.Set;
 import com.google.common.collect.Sets;
 
 import jakarta.persistence.*;
-
+import lombok.*;
 
 @Entity
+@Table(name = "reader")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Reader {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id", updatable = false, unique = true)
 	private Long id;
 
 	@ManyToMany
@@ -22,17 +28,17 @@ public class Reader {
 	)
 	private Set<Book> favouriteBooks = Sets.newHashSet();
 
-	@ElementCollection
+	@ElementCollection(targetClass = Genre.class)
+	@Enumerated(EnumType.STRING)
+	@CollectionTable(name = "reader_favourite_genres", joinColumns = @JoinColumn(name = "reader_id"))
+	@Column(name = "favourite_genre", nullable = false)
 	private Set<Genre> favouriteGenres = Sets.newHashSet();
 
+	@Column(name = "age", nullable = false)
 	private int age;
 
 	public Reader(int age) {
 		this.age = age;
-	}
-
-	public Reader() {
-
 	}
 
 	public void addToFavourites(Book book) {
@@ -51,24 +57,12 @@ public class Reader {
 		favouriteGenres.remove(genre);
 	}
 
-	public int getAge() {
-		return age;
-	}
-
 	public Set<Book> getFavouriteBooks() {
 		return Sets.newHashSet(favouriteBooks);
 	}
 
 	public Set<Genre> getFavouriteGenres() {
 		return Sets.newHashSet(favouriteGenres);
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	@Override

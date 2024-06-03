@@ -1,51 +1,36 @@
 package com.devskiller.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.google.common.collect.Sets;
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.util.Set;
 
 @Entity
+@Table(name = "author")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Author {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id", updatable = false, unique = true)
 	private Long id;
+
+	@Column(name = "first_name", nullable = false)
 	private String firstName;
+
+	@Column(name = "last_name", nullable = false)
 	private String lastName;
+
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "book_id")
+	private Set<Book> books = Sets.newHashSet();
 
 	public Author(String firstName, String lastName) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 	}
-
-	public Author() {
-
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getFirstName() {
-		return firstName;
-	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
-
 }

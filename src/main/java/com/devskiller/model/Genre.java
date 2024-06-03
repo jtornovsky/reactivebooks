@@ -1,7 +1,6 @@
 package com.devskiller.model;
 
 public enum Genre {
-
 	FICTION,
 	HORROR,
 	COMEDY,
@@ -11,6 +10,6 @@ public enum Genre {
 	ROMANTIC,
 	TECH,
 	TRAGEDY,
-	FANTASY
-
+	FANTASY,
+	OTHER
 }

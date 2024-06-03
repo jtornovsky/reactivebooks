@@ -1,0 +1,39 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0004-create-reader_favourite_books-table
+      author: jtornovsky
+      changes:
+        - createTable:
+            tableName: reader_favourite_books
+            columns:
+              - column:
+                  name: reader_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: book_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            tableName: reader_favourite_books
+            columnNames: reader_id, book_id
+        - addForeignKeyConstraint:
+            baseTableName: reader_favourite_books
+            baseColumnNames: reader_id
+            constraintName: fk_reader_favourite_books_reader
+            referencedTableName: reader
+            referencedColumnNames: id
+            onDelete: CASCADE
+        - addForeignKeyConstraint:
+            baseTableName: reader_favourite_books
+            baseColumnNames: book_id
+            constraintName: fk_reader_favourite_books_book
+            referencedTableName: book
+            referencedColumnNames: id
+            onDelete: CASCADE
+
+      rollback:
+        - dropTable:
+            tableName: reader_favourite_books

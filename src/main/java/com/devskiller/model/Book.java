@@ -5,40 +5,41 @@ import java.util.Objects;
 import java.util.Set;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
+@Table(name = "book")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Book {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id", updatable = false, unique = true)
 	private Long id;
 
 	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinColumn(name = "author_id")
 	private Author author;
 
+	@Column(name = "title", nullable = false)
 	private String title;
 
+	@Column(name = "isbn")
 	private String isbn;
 
+	@Enumerated(EnumType.STRING)
+	@Column(name = "genre", nullable = false)
 	private Genre genre;
 
+	@Column(name = "rating", nullable = false)
 	private int rating;
 
-	@ManyToMany(mappedBy = "favouriteBooks")
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "reader_id")
 	private Set<Reader> readers = new HashSet<>();
-
-	public Book() {
-
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public Book(Author author, String title, String isbn, Genre genre) {
 		this.author = author;
@@ -62,29 +63,9 @@ public class Book {
 		}
 	}
 
-	public Author getAuthor() {
-		return author;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public String getIsbn() {
-		return isbn;
-	}
-
-	public int getRating() {
-		return rating;
-	}
-
 	public void setRating(int rating) {
 		validate(rating);
 		this.rating = rating;
-	}
-
-	public Genre getGenre() {
-		return genre;
 	}
 
 	@Override

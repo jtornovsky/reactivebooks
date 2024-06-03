@@ -14,20 +14,20 @@ import org.springframework.stereotype.Service;
 @Service
 public class BookSuggestionService {
 
-	private final BookRepository bookRepository;
+	private final BookService bookService;
 	private final ReaderService readerService;
 	private Set<Book> books;
 	private Set<Reader> readers;
 
 	@Autowired
-	public BookSuggestionService(BookRepository bookRepository, ReaderService readerService,
+	public BookSuggestionService(BookService bookService, ReaderService readerService,
 								 Set<Book> books, Set<Reader> readers) {
-		this.bookRepository = bookRepository;
+		this.bookService = bookService;
 		this.readerService = readerService;
 	}
 
 	public BookSuggestionService(Set<Book> books, Set<Reader> readers) {
-		this.bookRepository = null;
+		this.bookService = null;
 		this.readerService = null;
 		this.books = books;
 		this.readers = readers;
@@ -37,17 +37,13 @@ public class BookSuggestionService {
 		Optional<Reader> readerOpt = readerService.getReaderById(readerId);
 
 		// Reload books and readers from the persistence layer
-		books = new HashSet<>(bookRepository.findAll());
+		books = new HashSet<>(bookService.getAllBooks());
 		readers = new HashSet<>(readerService.getAllReaders());
 
 		// Just to show working with persistence layer, as it might be also retrieved from the readers set
 		Reader reader = readerOpt.orElseThrow(() -> new RuntimeException("Reader with id " + readerId + " not found."));
 
 		return suggestBooks(reader, books, readers, 4, null, ComparisonType.GREATER_THAN_OR_EQUAL);
-	}
-
-	public void addBook(Book book) {
-		bookRepository.save(book);
 	}
 
 	public Set<String> suggestBooks(Reader reader) {

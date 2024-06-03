@@ -1,6 +1,7 @@
 package com.devskiller.controller;
 
 import com.devskiller.model.Book;
+import com.devskiller.services.BookService;
 import com.devskiller.services.BookSuggestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,10 +13,12 @@ import java.util.Set;
 @RequestMapping("/api/v1/books")
 public class BookSuggestionController {
 
+    private final BookService bookService;
     private final BookSuggestionService bookSuggestionService;
 
     @Autowired
-    public BookSuggestionController(BookSuggestionService bookSuggestionService) {
+    public BookSuggestionController(BookService bookService, BookSuggestionService bookSuggestionService) {
+        this.bookService = bookService;
         this.bookSuggestionService = bookSuggestionService;
     }
 
@@ -29,7 +32,7 @@ public class BookSuggestionController {
     @ResponseStatus(HttpStatus.CREATED)
     public void addBook(@RequestBody Book book) {
         // need to create BookDto and get it as a request body param
-        bookSuggestionService.addBook(book);
+        bookService.addBook(book);
     }
 }
 
