@@ -6,6 +6,7 @@ import com.devskiller.model.Reader;
 import com.devskiller.repo.BookRepository;
 import com.devskiller.repo.ReaderRepository;
 import jakarta.transaction.Transactional;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -65,9 +66,9 @@ public class BookSuggestionServiceWithSpringBootTests {
     private Reader reader2 = new Reader(randomAlphabetic(8), randomAlphabetic(10), 25);
     private Reader reader3 = new Reader(randomAlphabetic(8), randomAlphabetic(10), nextInt(0, 120));
 
-    @Test
+    @BeforeEach
     @Transactional
-    public void testSuggestBooks() {
+    public void setUp() {
 
         reader1.getFavouriteBooks().add(book1);
         reader1.getFavouriteBooks().add(book2);
@@ -88,6 +89,11 @@ public class BookSuggestionServiceWithSpringBootTests {
         bookService.addBook(book4);
         bookService.addBook(book5);
         bookService.addBook(book6);
+    }
+
+    @Test
+    @Transactional
+    public void testSuggestBooks() {
 
         assertEquals(3, readerService.getAllReaders().size());
         assertEquals(6, bookService.getAllBooks().size());
@@ -95,5 +101,19 @@ public class BookSuggestionServiceWithSpringBootTests {
         Set<String> suggestions = bookSuggestionService.suggestBooks(reader1.getId());
         assertTrue(suggestions.contains(book1.getTitle()));
         assertTrue(suggestions.contains(book2.getTitle()));
+    }
+
+    @Test
+    @Transactional
+    public void testSuggestNoBooks() {
+
+        assertEquals(3, readerService.getAllReaders().size());
+        assertEquals(6, bookService.getAllBooks().size());
+
+        Set<String> suggestions = bookSuggestionService.suggestBooks(reader3.getId());
+        assertTrue(suggestions.size() == 0);
+
+        suggestions = bookSuggestionService.suggestBooks(reader2.getId());
+        assertTrue(suggestions.size() == 0);
     }
 }
