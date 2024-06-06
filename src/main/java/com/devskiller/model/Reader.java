@@ -20,7 +20,13 @@ public class Reader {
 	@Column(name = "id", updatable = false, unique = true)
 	private Long id;
 
-	@ManyToMany
+	@Column(name = "first_name", nullable = false)
+	private String firstName;
+
+	@Column(name = "last_name", nullable = false)
+	private String lastName;
+
+	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinTable(
 			name = "reader_favourite_books",
 			joinColumns = @JoinColumn(name = "reader_id"),
@@ -37,38 +43,18 @@ public class Reader {
 	@Column(name = "age", nullable = false)
 	private int age;
 
-	public Reader(int age) {
+	public Reader(String firstName, String lastName, int age) {
+		this.firstName = firstName;
+		this.lastName = lastName;
 		this.age = age;
-	}
-
-	public void addToFavourites(Book book) {
-		favouriteBooks.add(book);
-	}
-
-	public void addToFavourites(Genre genre) {
-		favouriteGenres.add(genre);
-	}
-
-	public void removeFromFavourites(Book book) {
-		favouriteBooks.remove(book);
-	}
-
-	public void removeFromFavourites(Genre genre) {
-		favouriteGenres.remove(genre);
-	}
-
-	public Set<Book> getFavouriteBooks() {
-		return Sets.newHashSet(favouriteBooks);
-	}
-
-	public Set<Genre> getFavouriteGenres() {
-		return Sets.newHashSet(favouriteGenres);
 	}
 
 	@Override
 	public int hashCode() {
 		int result = favouriteBooks.hashCode();
 		result = 31 * result + favouriteGenres.hashCode();
+		result = 31 * result + firstName.hashCode();
+		result = 31 * result + lastName.hashCode();
 		result = 31 * result + age;
 		return result;
 	}
@@ -81,6 +67,8 @@ public class Reader {
 		Reader reader = (Reader) o;
 
 		if (age != reader.age) return false;
+		if (!firstName.equals(reader.firstName)) return false;
+		if (!lastName.equals(reader.lastName)) return false;
 		if (!favouriteBooks.equals(reader.favouriteBooks)) return false;
 		return favouriteGenres.equals(reader.favouriteGenres);
 	}

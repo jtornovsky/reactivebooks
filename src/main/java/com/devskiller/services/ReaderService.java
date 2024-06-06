@@ -7,6 +7,7 @@ import com.devskiller.repo.ReaderRepository;
 import com.google.common.collect.Sets;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,35 +27,43 @@ public class ReaderService {
         return readerRepository.findById(readerId);
     }
 
+    @Transactional(readOnly = true)
     public List<Reader> getAllReaders() {
         return readerRepository.findAll();
     }
 
+    @Transactional
     public void saveReader(Reader reader) {
-        readerRepository.save(reader);
+        readerRepository.saveAndFlush(reader);
     }
 
-//    public void addToFavourites(Book book) {
-//        favouriteBooks.add(book);
-//    }
-//
-//    public void addToFavourites(Genre genre) {
-//        favouriteGenres.add(genre);
-//    }
-//
-//    public void removeFromFavourites(Book book) {
-//        favouriteBooks.remove(book);
-//    }
-//
-//    public void removeFromFavourites(Genre genre) {
-//        favouriteGenres.remove(genre);
-//    }
-//
-//    public Set<Book> getFavouriteBooks() {
-//        return Sets.newHashSet(favouriteBooks);
-//    }
-//
-//    public Set<Genre> getFavouriteGenres() {
-//        return Sets.newHashSet(favouriteGenres);
-//    }
+    @Transactional()
+    public void addToFavourites(Reader reader, Book book) {
+        reader.getFavouriteBooks().add(book);
+    }
+
+    @Transactional()
+    public void addToFavourites(Reader reader, Genre genre) {
+        reader.getFavouriteGenres().add(genre);
+    }
+
+    @Transactional()
+    public void removeFromFavourites(Reader reader, Book book) {
+        reader.getFavouriteBooks().remove(book);
+    }
+
+    @Transactional()
+    public void removeFromFavourites(Reader reader, Genre genre) {
+        reader.getFavouriteGenres().remove(genre);
+    }
+
+    @Transactional(readOnly = true)
+    public Set<Book> getFavouriteBooks(Reader reader) {
+        return Sets.newHashSet(reader.getFavouriteBooks());
+    }
+
+    @Transactional(readOnly = true)
+    public Set<Genre> getFavouriteGenres(Reader reader) {
+        return Sets.newHashSet(reader.getFavouriteGenres());
+    }
 }

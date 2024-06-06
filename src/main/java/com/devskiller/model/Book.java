@@ -21,7 +21,7 @@ public class Book {
 	private Long id;
 
 	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-	@JoinColumn(name = "author_id")
+	@JoinColumn(name = "author_id", nullable = false)
 	private Author author;
 
 	@Column(name = "title", nullable = false)

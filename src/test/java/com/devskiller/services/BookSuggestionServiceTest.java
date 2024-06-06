@@ -18,6 +18,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class BookSuggestionServiceTest {
 
+	private final ReaderService readerService = new ReaderService(null);
+
 	private Author author1 = new Author(randomAlphabetic(8), randomAlphabetic(10));
 	private Author author2 = new Author(randomAlphabetic(8), randomAlphabetic(10));
 	private Author author3 = new Author(randomAlphabetic(8), randomAlphabetic(10));
@@ -31,20 +33,20 @@ public class BookSuggestionServiceTest {
 	private Book book6 = new Book(author5, randomAlphabetic(15), randomAlphabetic(10), DRAMA, 5);
 	private int randomAge1 = nextInt(0, 120);
 	private int randomAge2 = nextInt(0, 120);
-	private Reader reader1 = new Reader(randomAge1);
-	private Reader reader2 = new Reader(randomAge1);
-	private Reader reader3 = new Reader(randomAge2);
+	private Reader reader1 = new Reader(randomAlphabetic(8), randomAlphabetic(10), randomAge1);
+	private Reader reader2 = new Reader(randomAlphabetic(8), randomAlphabetic(10), randomAge1);
+	private Reader reader3 = new Reader(randomAlphabetic(8), randomAlphabetic(10), randomAge2);
 	private BookSuggestionService suggestionService;
 
 	@Before
 	public void setUp() {
-		reader1.addToFavourites(HORROR);
-		reader1.addToFavourites(ROMANTIC);
-		reader2.addToFavourites(book2);
-		reader2.addToFavourites(book1);
-		reader2.addToFavourites(book3);
-		reader2.addToFavourites(book4);
-		reader3.addToFavourites(book5);
+		readerService.addToFavourites(reader1, HORROR);
+		readerService.addToFavourites(reader1, ROMANTIC);
+		readerService.addToFavourites(reader2, book2);
+		readerService.addToFavourites(reader2, book1);
+		readerService.addToFavourites(reader2, book3);
+		readerService.addToFavourites(reader2, book4);
+		readerService.addToFavourites(reader3, book5);
 		Set<Book> books = newHashSet(book1, book2, book3, book4, book5, book6);
 		Set<Reader> readers = newHashSet(reader1, reader2, reader3);
 		suggestionService = new BookSuggestionService(books, readers);

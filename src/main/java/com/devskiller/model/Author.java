@@ -25,8 +25,7 @@ public class Author {
 	@Column(name = "last_name", nullable = false)
 	private String lastName;
 
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "book_id")
+	@OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
 	private Set<Book> books = Sets.newHashSet();
 
 	public Author(String firstName, String lastName) {
