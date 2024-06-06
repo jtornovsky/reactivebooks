@@ -38,7 +38,7 @@ public class Book {
 	private int rating;
 
 	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "reader_id")
+	@JoinColumn(name = "book_id")
 	private Set<Reader> readers = new HashSet<>();
 
 	public Book(Author author, String title, String isbn, Genre genre) {
